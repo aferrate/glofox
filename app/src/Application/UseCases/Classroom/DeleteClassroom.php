@@ -5,8 +5,9 @@ namespace App\Application\UseCases\Classroom;
 use App\Domain\Repository\ClassroomRepositoryInterface;
 use App\Domain\Repository\BookingRepositoryInterface;
 use App\Domain\Validations\ClassroomChecker;
+use App\Application\UseCases\Classroom\AbstractClassroom;
 
-class DeleteClassroom
+class DeleteClassroom extends AbstractClassroom
 {
     private $classroomRepository;
     private $bookingRepository;
@@ -39,25 +40,11 @@ class DeleteClassroom
             }
     
             $this->classroomRepository->delete($classroom);
-            $this->deleteBookingsByClassroomId($id);
+            $this->deleteBookingsByClassroomId($id, $this->bookingRepository);
     
             return ['status' => false, 'data' => ['message' => 'classroom deleted']];
         } catch(\Exception $e){
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
-        }
-    }
-
-    private function deleteBookingsByClassroomId(int $id): void
-    {
-        $bookingIds = $this->bookingRepository->findByClassroomId($id);
-        $arrIds = [];
-
-        foreach($bookingIds as $id) {
-            $arrIds[] = intval($id['id']);
-        }
-
-        if(!empty($bookingIds)) {
-            $this->bookingRepository->deleteFromArrayOfIds($arrIds);
         }
     }
 }

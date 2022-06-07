@@ -7,8 +7,9 @@ use App\Domain\Repository\BookingRepositoryInterface;
 use App\Domain\Model\Classroom;
 use App\Domain\Validations\ClassroomChecker;
 use DateTime;
+use App\Application\UseCases\Classroom\AbstractClassroom;
 
-class UpdateClassroom
+class UpdateClassroom extends AbstractClassroom
 {
     private $classroomRepository;
     private $bookingRepository;
@@ -69,28 +70,14 @@ class UpdateClassroom
     {
         if(DateTime::createFromFormat('d-m-Y', $classroomArr['start_date']) > $classroom->getStartDate() || 
             DateTime::createFromFormat('d-m-Y', $classroomArr['end_date']) < $classroom->getEndDate()) {
-                $this->deleteBookingsByClassroomId($classroom->getId());
+                $this->deleteBookingsByClassroomId($classroom->getId(), $this->bookingRepository);
         }
     }
 
     private function checkBookingsCapacity(Classroom $classroom, array $classroomArr): void
     {
         if($classroomArr['capacity'] < $classroom->getCapacity()) {
-            $this->deleteBookingsByClassroomId($classroom->getId());
-        }
-    }
-
-    private function deleteBookingsByClassroomId(int $id): void
-    {
-        $bookingIds = $this->bookingRepository->findByClassroomId($id);
-        $arrIds = [];
-
-        foreach($bookingIds as $id) {
-            $arrIds[] = intval($id['id']);
-        }
-
-        if(!empty($bookingIds)) {
-            $this->bookingRepository->deleteFromArrayOfIds($arrIds);
+            $this->deleteBookingsByClassroomId($classroom->getId(), $this->bookingRepository);
         }
     }
 }
