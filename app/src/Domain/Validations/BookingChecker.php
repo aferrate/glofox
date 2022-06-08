@@ -21,11 +21,11 @@ final class BookingChecker
             return ['status' => false, 'message' => 'need mandatory parameters'];    
         }
 
-        if(!$this->checkMemberId($params['member_id'])) {
+        if(!$this->checkMemberId($params['idMember'])) {
             return ['status' => false, 'message' => 'member id must be integer and greater than 0'];    
         }
 
-        if(!$this->checkClassroomId($params['classroom_id'])) {
+        if(!$this->checkClassroomId($params['idClassroom'])) {
             return ['status' => false, 'message' => 'classroom id must be integer and greater than 0'];    
         }
 
@@ -42,7 +42,7 @@ final class BookingChecker
 
     private function checkMandatoryParams(array $params): bool
     {
-        if(!isset($params['member_id']) || !isset($params['classroom_id']) || !isset($params['date'])) {
+        if(!isset($params['idMember']) || !isset($params['idClassroom']) || !isset($params['date'])) {
             return false;
         }
 

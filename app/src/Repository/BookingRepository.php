@@ -49,7 +49,7 @@ final class BookingRepository implements BookingRepositoryInterface
         $date = DateTime::createFromFormat('d-m-Y', $params['date']);
 
         return $this->entityManager->getRepository(Booking::class)
-            ->findOneBy(['idMember' => $params['member_id'], 'idClassroom' => $params['classroom_id'], 'date' => $date]);
+            ->findOneBy(['idMember' => $params['idMember'], 'idClassroom' => $params['idClassroom'], 'date' => $date]);
     }
 
     public function findByClassroomId(int $id): array
@@ -96,7 +96,7 @@ final class BookingRepository implements BookingRepositoryInterface
     {
         $dateClass = DateTime::createFromFormat('d-m-Y', $params['date']);
         $count = count($this->entityManager->getRepository(Booking::class)
-            ->findBy(['idClassroom' => $params['classroom_id'], 'date' => $dateClass]));
+            ->findBy(['idClassroom' => $params['idClassroom'], 'date' => $dateClass]));
 
         return $count;
     }

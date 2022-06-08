@@ -7,6 +7,7 @@ use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Repository\ClassroomRepositoryInterface;
 use App\Domain\Model\Booking;
 use App\Domain\Validations\BookingChecker;
+use App\Domain\Service\SerializerInterface;
 
 class UpdateBooking
 {
@@ -14,18 +15,21 @@ class UpdateBooking
     private $bookingChecker;
     private $memberRepository;
     private $classroomRepository;
+    private $serializer;
 
     public function __construct(
         BookingRepositoryInterface $bookingRepository,
         BookingChecker $bookingChecker,
         MemberRepositoryInterface $memberRepository,
-        ClassroomRepositoryInterface $classroomRepository
+        ClassroomRepositoryInterface $classroomRepository,
+        SerializerInterface $serializer
     )
     {
         $this->bookingRepository = $bookingRepository;
         $this->bookingChecker = $bookingChecker;
         $this->memberRepository = $memberRepository;
         $this->classroomRepository = $classroomRepository;
+        $this->serializer = $serializer;
     }
 
     public function execute(int $id, array $bookingArr): array
@@ -49,17 +53,15 @@ class UpdateBooking
                 return ['status' => false, 'data' => ['message' => 'no booking found']];
             }
 
-            $bookingExist = $this->bookingRepository->findByDateMemberIdClassId($bookingArr);
-
-            if(!is_null($bookingExist)) {
+            if(!is_null($this->bookingRepository->findByDateMemberIdClassId($bookingArr))) {
                 return ['status' => false, 'data' => ['message' => 'booking already exists']];
             }
 
-            if(is_null($this->memberRepository->findOneById($bookingArr['member_id']))) {
+            if(is_null($this->memberRepository->findOneById($bookingArr['idMember']))) {
                 return ['status' => false, 'data' => ['message' => 'unexistent member']];
             }
 
-            $classroom = $this->classroomRepository->findOneById($bookingArr['classroom_id']);
+            $classroom = $this->classroomRepository->findOneById($bookingArr['idClassroom']);
 
             if(is_null($classroom)) {
                 return ['status' => false, 'data' => ['message' => 'unexistent classroom']];
@@ -69,13 +71,21 @@ class UpdateBooking
                 return ['status' => false, 'data' => ['message' => 'no slots available']];
             }
     
-            $booking = Booking::returnObjBooking($booking, $bookingArr);
-    
-            $this->bookingRepository->save($booking);
+            $this->bookingRepository->save($this->updateBookingObject($booking, $bookingArr));
     
             return ['status' => true, 'data' => ['message' => 'booking updated!']];
         } catch(\Exception $e){
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
+    }
+
+    private function updateBookingObject(Booking $booking, array $bookingArr): Booking
+    {
+        $bookingNew = $this->serializer->deserialize($bookingArr, 'booking');
+        $booking->setIdMember($bookingNew->getIdMember());
+        $booking->setIdClassroom($bookingNew->getIdClassroom());
+        $booking->setDate($bookingNew->getDate());
+
+        return $booking;
     }
 }
