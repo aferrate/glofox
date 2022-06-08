@@ -83,33 +83,4 @@ final class Classroom
     {
         $this->endDate = $endDate;
     }
-
-    /**
-     * @return array
-     */
-    public function returnArrayClassroom(Classroom $classroom): array
-    {
-        $data[] = [
-            'id' => $classroom->getId(),
-            'name' => $classroom->getName(),
-            'capacity' => $classroom->getCapacity(),
-            'startDate' => $classroom->getStartDate(),
-            'endDate' => $classroom->getEndDate()
-        ];
-
-        return $data;
-    }
-
-    /**
-     * @return Classroom
-     */
-    public static function returnObjClassroom(Classroom $classroom, array $classroomArr): Classroom
-    {
-        $classroom->setName($classroomArr['name']);
-        $classroom->setCapacity($classroomArr['capacity']);
-        $classroom->setStartDate(DateTime::createFromFormat('d-m-Y', $classroomArr['start_date']));
-        $classroom->setEndDate(DateTime::createFromFormat('d-m-Y', $classroomArr['end_date']));
-
-        return $classroom;
-    }
 }

@@ -4,16 +4,23 @@ namespace App\Application\UseCases\Classroom;
 
 use App\Domain\Repository\ClassroomRepositoryInterface;
 use App\Domain\Validations\ClassroomChecker;
+use App\Domain\Service\SerializerInterface;
 
 class GetClassroomFromId
 {
     private $classroomRepository;
     private $classroomChecker;
+    private $serializer;
 
-    public function __construct(ClassroomRepositoryInterface $classroomRepository, ClassroomChecker $classroomChecker)
+    public function __construct(
+        ClassroomRepositoryInterface $classroomRepository,
+        ClassroomChecker $classroomChecker,
+        SerializerInterface $serializer
+    )
     {
         $this->classroomRepository = $classroomRepository;
         $this->classroomChecker = $classroomChecker;
+        $this->serializer = $serializer;
     }
 
     public function execute(int $id): array
@@ -31,7 +38,7 @@ class GetClassroomFromId
                 return ['status' => false, 'data' => ['message' => 'no classroom found']];
             }
     
-            $classroom = $classroomObj->returnArrayClassroom($classroomObj);
+            $classroom = json_decode($this->serializer->serialize($classroomObj), true);
     
             return ['status' => true, 'data' => $classroom];
         } catch(\Exception $e){

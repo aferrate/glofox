@@ -8,22 +8,26 @@ use App\Domain\Model\Classroom;
 use App\Domain\Validations\ClassroomChecker;
 use DateTime;
 use App\Application\UseCases\AbstractUseCase;
+use App\Domain\Service\SerializerInterface;
 
 class UpdateClassroom extends AbstractUseCase
 {
     private $classroomRepository;
     private $bookingRepository;
     private $classroomChecker;
+    private $serializer;
 
     public function __construct(
         ClassroomRepositoryInterface $classroomRepository,
         BookingRepositoryInterface $bookingRepository,
-        ClassroomChecker $classroomChecker
+        ClassroomChecker $classroomChecker,
+        SerializerInterface $serializer
     )
     {
         $this->classroomRepository = $classroomRepository;
         $this->classroomChecker = $classroomChecker;
         $this->bookingRepository = $bookingRepository;
+        $this->serializer = $serializer;
     }
 
     public function execute(int $id, array $classroomArr): array
@@ -47,18 +51,14 @@ class UpdateClassroom extends AbstractUseCase
                 return ['status' => false, 'data' => ['message' => 'no classroom found']];
             }
 
-            $classroomExist = $this->classroomRepository->findOneByNameAndDatesAndCapacity($classroomArr);
-
-            if(!is_null($classroomExist)) {
+            if(!is_null($this->classroomRepository->findOneByNameAndDatesAndCapacity($classroomArr))) {
                 return ['status' => false, 'data' => ['message' => 'classroom already exists']];
             }
 
             $this->checkBookingsDate($classroom, $classroomArr);
             $this->checkBookingsCapacity($classroom, $classroomArr);
     
-            $classroom = Classroom::returnObjClassroom($classroom, $classroomArr);
-    
-            $this->classroomRepository->save($classroom);
+            $this->classroomRepository->save($this->updateClassroomObject($classroom, $classroomArr));
     
             return ['status' => true, 'data' => ['message' => 'classroom updated!']];
         } catch(\Exception $e){
@@ -79,5 +79,16 @@ class UpdateClassroom extends AbstractUseCase
         if($classroomArr['capacity'] < $classroom->getCapacity()) {
             $this->deleteBookingsByClassroomId($classroom->getId(), $this->bookingRepository);
         }
+    }
+
+    private function updateClassroomObject(Classroom $classroom, array $classroomArr): Classroom
+    {
+        $classroomNew = $this->serializer->deserialize($classroomArr, 'classroom');
+        $classroom->setName($classroomNew->getName());
+        $classroom->setCapacity($classroomNew->getCapacity());
+        $classroom->setStartDate($classroomNew->getStartDate());
+        $classroom->setEndDate($classroomNew->getEndDate());
+
+        return $classroom;
     }
 }
