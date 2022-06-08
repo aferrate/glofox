@@ -111,21 +111,21 @@ GET
 ```
 
 ```
-http://localhost/api/v1/booking/id/1
+http://localhost/api/v1/booking/create
 POST
 {
-    "member_id" : 1,
-    "classroom_id" : 1,
+    "idMember" : 1,
+    "idClassroom" : 1,
     "date" : "14-06-2022"
 }
 ```
 
 ```
-http://localhost/api/v1/booking/id/1
+http://localhost/api/v1/booking/update/1
 PUT
 {
-    "member_id" : 2,
-    "classroom_id" : 2,
+    "idMember" : 2,
+    "idClassroom" : 2,
     "date" : "15-06-2022"
 }
 ```
