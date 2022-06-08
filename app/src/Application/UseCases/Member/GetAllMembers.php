@@ -4,14 +4,16 @@ namespace App\Application\UseCases\Member;
 
 use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Model\Member;
+use App\Domain\Service\SerializerInterface;
 
 class GetAllMembers
 {
     private $memberRepository;
 
-    public function __construct(MemberRepositoryInterface $memberRepository)
+    public function __construct(MemberRepositoryInterface $memberRepository, SerializerInterface $serializer)
     {
         $this->memberRepository = $memberRepository;
+        $this->serializer = $serializer;
     }
 
     public function execute(): array
@@ -26,7 +28,7 @@ class GetAllMembers
             $members = [];
 
             foreach ($membersObjs as $member) {
-                $members[] = $member->returnArrayMember($member);
+                $members[] = json_decode($this->serializer->serialize($member), true);
             }
 
             return ['status' => true, 'data' => $members];

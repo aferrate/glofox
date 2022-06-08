@@ -5,16 +5,23 @@ namespace App\Application\UseCases\Member;
 use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Model\Member;
 use App\Domain\Validations\MemberChecker;
+use App\Domain\Service\SerializerInterface;
 
 class AddMember
 {
     private $memberRepository;
     private $memberChecker;
+    private $serializer;
 
-    public function __construct(MemberRepositoryInterface $memberRepository, MemberChecker $memberChecker)
+    public function __construct(
+        MemberRepositoryInterface $memberRepository,
+        MemberChecker $memberChecker,
+        SerializerInterface $serializer
+    )
     {
         $this->memberRepository = $memberRepository;
         $this->memberChecker = $memberChecker;
+        $this->serializer = $serializer;
     }
 
     public function execute(array $memberArr): array
@@ -31,10 +38,9 @@ class AddMember
             if(!is_null($memberExist)) {
                 return ['status' => false, 'data' => ['message' => 'member already exists']];
             }
+            
+            $member = $this->serializer->deserialize($memberArr, 'member');;
 
-            $member = new Member();
-            $member = Member::returnObjMember($member, $memberArr);
-    
             $id = $this->memberRepository->save($member);
     
             return [

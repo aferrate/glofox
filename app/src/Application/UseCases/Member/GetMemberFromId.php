@@ -4,16 +4,23 @@ namespace App\Application\UseCases\Member;
 
 use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Validations\MemberChecker;
+use App\Domain\Service\SerializerInterface;
 
 class GetMemberFromId
 {
     private $memberRepository;
     private $memberChecker;
+    private $serializer;
 
-    public function __construct(MemberRepositoryInterface $memberRepository, MemberChecker $memberChecker)
+    public function __construct(
+        MemberRepositoryInterface $memberRepository,
+        MemberChecker $memberChecker,
+        SerializerInterface $serializer
+    )
     {
         $this->memberRepository = $memberRepository;
         $this->memberChecker = $memberChecker;
+        $this->serializer = $serializer;
     }
 
     public function execute(int $id): array
@@ -31,7 +38,7 @@ class GetMemberFromId
                 return ['status' => false, 'data' => ['message' => 'no member found']];
             }
     
-            $member = $memberObj->returnArrayMember($memberObj);
+            $member = json_decode($this->serializer->serialize($memberObj), true);
     
             return ['status' => true, 'data' => $member];
         } catch(\Exception $e){

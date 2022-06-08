@@ -5,16 +5,23 @@ namespace App\Application\UseCases\Member;
 use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Model\Member;
 use App\Domain\Validations\MemberChecker;
+use App\Domain\Service\SerializerInterface;
 
 class UpdateMember
 {
     private $memberRepository;
     private $memberChecker;
+    private $serializer;
 
-    public function __construct(MemberRepositoryInterface $memberRepository, MemberChecker $memberChecker)
+    public function __construct(
+        MemberRepositoryInterface $memberRepository,
+        MemberChecker $memberChecker,
+        SerializerInterface $serializer
+    )
     {
         $this->memberRepository = $memberRepository;
         $this->memberChecker = $memberChecker;
+        $this->serializer = $serializer;
     }
 
     public function execute(int $id, array $memberArr): array
@@ -38,19 +45,23 @@ class UpdateMember
                 return ['status' => false, 'data' => ['message' => 'no member found']];
             }
 
-            $memberExist = $this->memberRepository->findOneByName($memberArr['name']);
-
-            if(!is_null($memberExist)) {
+            if(!is_null($this->memberRepository->findOneByName($memberArr['name']))) {
                 return ['status' => false, 'data' => ['message' => 'member already exists']];
             }
     
-            $member = Member::returnObjMember($member, $memberArr);
-    
-            $this->memberRepository->save($member);
+            $this->memberRepository->save($this->updateMemberObject($member, $memberArr));
     
             return ['status' => true, 'data' => ['message' => 'member updated!']];
         } catch(\Exception $e){
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
+    }
+
+    private function updateMemberObject(Member $member, array $memberArr): Member
+    {
+        $memberNew = $this->serializer->deserialize($memberArr, 'member');
+        $member->setName($memberNew->getName());
+
+        return $member;
     }
 }
