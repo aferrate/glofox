@@ -5,9 +5,9 @@ namespace App\Application\UseCases\Classroom;
 use App\Domain\Repository\ClassroomRepositoryInterface;
 use App\Domain\Repository\BookingRepositoryInterface;
 use App\Domain\Validations\ClassroomChecker;
-use App\Application\UseCases\Classroom\AbstractClassroom;
+use App\Application\UseCases\AbstractUseCase;
 
-class DeleteClassroom extends AbstractClassroom
+class DeleteClassroom extends AbstractUseCase
 {
     private $classroomRepository;
     private $bookingRepository;

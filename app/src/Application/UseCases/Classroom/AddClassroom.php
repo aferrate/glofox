@@ -5,16 +5,24 @@ namespace App\Application\UseCases\Classroom;
 use App\Domain\Repository\ClassroomRepositoryInterface;
 use App\Domain\Model\Classroom;
 use App\Domain\Validations\ClassroomChecker;
+use App\Domain\Service\SerializerInterface;
+use App\Application\UseCases\AbstractUseCase;
 
-class AddClassroom
+class AddClassroom extends AbstractUseCase
 {
     private $classroomRepository;
     private $classroomChecker;
+    private $serializer;
 
-    public function __construct(ClassroomRepositoryInterface $classroomRepository, ClassroomChecker $classroomChecker)
+    public function __construct(
+        ClassroomRepositoryInterface $classroomRepository,
+        ClassroomChecker $classroomChecker,
+        SerializerInterface $serializer
+    )
     {
         $this->classroomRepository = $classroomRepository;
         $this->classroomChecker = $classroomChecker;
+        $this->serializer = $serializer;
     }
 
     public function execute(array $classroomArr): array
@@ -26,14 +34,11 @@ class AddClassroom
                 return ['status' => false, 'data' => ['message' => $checkParams['message']]];
             }
 
-            $classroomExist = $this->classroomRepository->findOneByNameAndDatesAndCapacity($classroomArr);
-
-            if(!is_null($classroomExist)) {
+            if(!is_null($this->classroomRepository->findOneByNameAndDatesAndCapacity($classroomArr))) {
                 return ['status' => false, 'data' => ['message' => 'classroom already exists']];
             }
 
-            $classroom = new Classroom();
-            $classroom = Classroom::returnObjClassroom($classroom, $classroomArr);
+            $classroom = $this->serializer->deserialize($classroomArr, 'classroom');
     
             $id = $this->classroomRepository->save($classroom);
     
