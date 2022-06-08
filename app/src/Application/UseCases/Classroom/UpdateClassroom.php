@@ -7,10 +7,10 @@ use App\Domain\Repository\BookingRepositoryInterface;
 use App\Domain\Model\Classroom;
 use App\Domain\Validations\ClassroomChecker;
 use DateTime;
-use App\Application\UseCases\AbstractUseCase;
+use App\Application\UseCases\Classroom\AbstractUseCaseClassroom;
 use App\Domain\Service\SerializerInterface;
 
-class UpdateClassroom extends AbstractUseCase
+class UpdateClassroom extends AbstractUseCaseClassroom
 {
     private $classroomRepository;
     private $bookingRepository;

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Application\UseCases;
+namespace App\Application\UseCases\Classroom;
 
 use App\Domain\Repository\BookingRepositoryInterface;
 
-abstract class AbstractUseCase
+abstract class AbstractUseCaseClassroom
 {
     protected function deleteBookingsByClassroomId(int $id, BookingRepositoryInterface $bookingRepository): void
     {
