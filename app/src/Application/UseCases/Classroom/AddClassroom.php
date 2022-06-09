@@ -6,9 +6,9 @@ use App\Domain\Repository\ClassroomRepositoryInterface;
 use App\Domain\Model\Classroom;
 use App\Domain\Validations\ClassroomChecker;
 use App\Domain\Service\SerializerInterface;
-use App\Application\UseCases\AbstractUseCase;
+use App\Application\UseCases\Classroom\AbstractUseCaseClassroom;
 
-class AddClassroom extends AbstractUseCase
+class AddClassroom extends AbstractUseCaseClassroom
 {
     private $classroomRepository;
     private $classroomChecker;
