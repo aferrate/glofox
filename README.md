@@ -25,9 +25,11 @@ docker-compose exec workspace bash
 php bin/console doctrine:migrations:migrate
 ```
 
-### Run tests (run with empty tables):
+### Run tests (run with empty db tables):
 ```
-phpunit
+phpunit tests/feature/ClassroomControllerTest.php
+phpunit tests/feature/MemberControllerTest.php
+phpunit tests/feature/BookingControllerTest.php
 ```
 
 
