@@ -25,7 +25,7 @@ docker-compose exec workspace bash
 php bin/console doctrine:migrations:migrate
 ```
 
-### Run tests:
+### Run tests (run with empty tables):
 ```
 phpunit
 ```
