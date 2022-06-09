@@ -34,7 +34,7 @@ class AddBooking
 
     public function execute(array $bookingArr): array
     {
-        //try{
+        try{
             $checkParams = $this->bookingChecker->checkParams($bookingArr);
 
             if($checkParams['status'] === false) {
@@ -70,8 +70,8 @@ class AddBooking
                     'id' => $id
                 ]
             ];
-        //} catch(\Exception $e){
-        //    return ['status' => false, 'data' => ['message' => $e->getMessage()]];
-        //}
+        } catch(\Exception $e){
+            return ['status' => false, 'data' => ['message' => $e->getMessage()]];
+        }
     }
 }
