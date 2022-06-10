@@ -3,6 +3,7 @@
 namespace App\Tests\Feature;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Repository\ClassroomRepository;
 
 class ClassroomControllerTest extends WebTestCase
 {
@@ -69,5 +70,50 @@ class ClassroomControllerTest extends WebTestCase
 
         $this->assertSame(201, $client->getResponse()->getStatusCode());
         $this->assertSame("classroom created!", json_decode($response->getContent(), true)['message']);
+    }
+
+    public function testUpdateClassroom(): void
+    {
+        $client = static::createClient();
+        $classroomRepository = static::getContainer()->get(ClassroomRepository::class);
+
+        $idClass = $classroomRepository->findOneByNameAndDatesAndCapacity([
+            'name' => 'testclassroom',
+            'capacity' => 7,
+            'start_date' => '10-06-2023',
+            'end_date' => '15-06-2023'
+        ])->getId();
+
+        $crawler = $client->request('PUT', "/api/v1/classroom/update/$idClass", [], [], ['CONTENT_TYPE' => 'application/json'], '{
+            "name" : "testclassroomupdate",
+            "capacity" : 9,
+            "start_date" : "09-06-2023",
+            "end_date" : "16-06-2023"
+        }');
+
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame("classroom updated!", json_decode($response->getContent(), true)['message']);
+    }
+
+    public function testDeleteClassroom(): void
+    {
+        $client = static::createClient();
+        $classroomRepository = static::getContainer()->get(ClassroomRepository::class);
+
+        $idClass = $classroomRepository->findOneByNameAndDatesAndCapacity([
+            'name' => 'testclassroomupdate',
+            'capacity' => 9,
+            'start_date' => '09-06-2023',
+            'end_date' => '16-06-2023'
+        ])->getId();
+        
+        $crawler = $client->request('DELETE', "/api/v1/classroom/delete/$idClass");
+
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame("classroom deleted", json_decode($response->getContent(), true)['message']);
     }
 }

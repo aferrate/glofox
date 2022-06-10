@@ -42,7 +42,7 @@ class DeleteClassroom extends AbstractUseCaseClassroom
             $this->classroomRepository->delete($classroom);
             $this->deleteBookingsByClassroomId($id, $this->bookingRepository);
     
-            return ['status' => false, 'data' => ['message' => 'classroom deleted']];
+            return ['status' => true, 'data' => ['message' => 'classroom deleted']];
         } catch(\Exception $e){
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
