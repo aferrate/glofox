@@ -41,7 +41,7 @@ class DeleteMember
             $this->memberRepository->delete($member);
             $this->deleteBookingsByMemberId($id);
     
-            return ['status' => false, 'data' => ['message' => 'member deleted']];
+            return ['status' => true, 'data' => ['message' => 'member deleted']];
         } catch(\Exception $e){
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }

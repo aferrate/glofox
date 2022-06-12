@@ -5,16 +5,13 @@ namespace App\Tests\Feature;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Repository\MemberRepository;
 use App\Repository\ClassroomRepository;
+use App\Repository\BookingRepository;
 use App\Domain\Model\Classroom;
 use App\Domain\Model\Member;
 use DateTime;
 
 class BookingControllerTest extends WebTestCase
 {
-    private $idClass;
-    private $idMember;
-    private $idBooking;
-
     public function testGetAllBookings(): void
     {
         $client = static::createClient();
@@ -43,7 +40,7 @@ class BookingControllerTest extends WebTestCase
         $crawler = $client->request('PUT', '/api/v1/booking/update/999999', [], [], ['CONTENT_TYPE' => 'application/json'], '{
             "idMember" : 1,
             "idClassroom" : 1,
-            "date" : "14-07-2022"
+            "date" : "14-07-2023"
         }');
 
         $response = $client->getResponse();
@@ -69,23 +66,84 @@ class BookingControllerTest extends WebTestCase
 
         $memberRepository = static::getContainer()->get(MemberRepository::class);
         $classroomRepository = static::getContainer()->get(ClassroomRepository::class);
-
-        $member = $memberRepository->findOneByName('testmember');
-        $params = ['name' => 'testclassroom', 'start_date' => '10-06-2023', 'end_date' => '15-06-2023', 'capacity' => 7];
-        $classroom = $classroomRepository->findOneByNameAndDatesAndCapacity($params);
-
-        $this->idMember = $member->getId();
-        $this->idClass = $classroom->getId();
+        $member = new Member();
+        $member->setName('testmember');
+        $classroom = new Classroom();
+        $classroom->setName('testclassroom');
+        $classroom->setCapacity(7);
+        $classroom->setStartDate(DateTime::createFromFormat('d-m-Y', '10-06-2023'));
+        $classroom->setEndDate(DateTime::createFromFormat('d-m-Y', '15-06-2023'));
+        $idMember = $memberRepository->save($member);
+        $idClassroom = $classroomRepository->save($classroom);
         
         $crawler = $client->request('POST', '/api/v1/booking/create', [], [], ['CONTENT_TYPE' => 'application/json'], '{
-            "idMember" : '.$this->idMember.',
-            "idClassroom" : '.$this->idClass.',
-            "date" : "14-07-2023"
+            "idMember" : '.$idMember.',
+            "idClassroom" : '.$idClassroom.',
+            "date" : "14-06-2023"
         }');
 
         $response = $client->getResponse();
 
         $this->assertSame(201, $client->getResponse()->getStatusCode());
         $this->assertSame("booking created!", json_decode($response->getContent(), true)['message']);
+    }
+
+    public function testUpdateBooking(): void
+    {
+        $client = static::createClient();
+
+        $memberRepository = static::getContainer()->get(MemberRepository::class);
+        $classroomRepository = static::getContainer()->get(ClassroomRepository::class);
+        $bookingRepository = static::getContainer()->get(BookingRepository::class);
+        $idMember = $memberRepository->findOneByName('testmember')->getId();
+        $idClassroom = $classroomRepository->findOneByNameAndDatesAndCapacity([
+            'name' => 'testclassroom',
+            'capacity' => 7,
+            'start_date' => '10-06-2023',
+            'end_date' => '15-06-2023'
+        ])->getId();
+        $idBooking = $bookingRepository->findByDateMemberIdClassId([
+            'idMember' => $idMember, 'idClassroom' => $idClassroom,
+            'date' => '14-06-2023'
+        ])->getId();
+
+        $crawler = $client->request('PUT', "/api/v1/booking/update/$idBooking", [], [], ['CONTENT_TYPE' => 'application/json'], '{
+            "idMember" : '.$idMember.',
+            "idClassroom" : '.$idClassroom.',
+            "date" : "13-06-2023"
+        }');
+
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame("booking updated!", json_decode($response->getContent(), true)['message']);
+    }
+
+    public function testDeleteBooking(): void
+    {
+        $client = static::createClient();
+
+        $memberRepository = static::getContainer()->get(MemberRepository::class);
+        $classroomRepository = static::getContainer()->get(ClassroomRepository::class);
+        $bookingRepository = static::getContainer()->get(BookingRepository::class);
+
+        $idMember = $memberRepository->findOneByName('testmember')->getId();
+        $idClassroom = $classroomRepository->findOneByNameAndDatesAndCapacity([
+            'name' => 'testclassroom',
+            'capacity' => 7,
+            'start_date' => '10-06-2023',
+            'end_date' => '15-06-2023'
+        ])->getId();
+        $idBooking = $bookingRepository->findByDateMemberIdClassId([
+            'idMember' => $idMember, 'idClassroom' => $idClassroom,
+            'date' => '13-06-2023'
+        ])->getId();
+        
+        $crawler = $client->request('DELETE', "/api/v1/booking/delete/$idBooking");
+
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame("booking deleted", json_decode($response->getContent(), true)['message']);
     }
 }

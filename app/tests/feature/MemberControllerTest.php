@@ -3,6 +3,7 @@
 namespace App\Tests\Feature;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Repository\MemberRepository;
 
 class MemberControllerTest extends WebTestCase
 {
@@ -63,5 +64,37 @@ class MemberControllerTest extends WebTestCase
 
         $this->assertSame(201, $client->getResponse()->getStatusCode());
         $this->assertSame("member created!", json_decode($response->getContent(), true)['message']);
+    }
+
+    public function testUpdateMember(): void
+    {
+        $client = static::createClient();
+        $memberRepository = static::getContainer()->get(MemberRepository::class);
+
+        $idMember = $memberRepository->findOneByName('testmember')->getId();
+
+        $crawler = $client->request('PUT', "/api/v1/member/update/$idMember", [], [], ['CONTENT_TYPE' => 'application/json'], '{
+            "name" : "testmemberupdate"
+        }');
+
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame("member updated!", json_decode($response->getContent(), true)['message']);
+    }
+
+    public function testDeleteMember(): void
+    {
+        $client = static::createClient();
+        $memberRepository = static::getContainer()->get(MemberRepository::class);
+
+        $idMember = $memberRepository->findOneByName('testmemberupdate')->getId();
+        
+        $crawler = $client->request('DELETE', "/api/v1/member/delete/$idMember");
+
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame("member deleted", json_decode($response->getContent(), true)['message']);
     }
 }

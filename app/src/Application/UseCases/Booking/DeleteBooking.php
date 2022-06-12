@@ -34,7 +34,7 @@ class DeleteBooking
     
             $this->bookingRepository->delete($booking);
     
-            return ['status' => false, 'data' => ['message' => 'booking deleted']];
+            return ['status' => true, 'data' => ['message' => 'booking deleted']];
         } catch(\Exception $e){
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }

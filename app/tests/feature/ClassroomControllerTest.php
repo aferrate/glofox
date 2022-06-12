@@ -35,8 +35,8 @@ class ClassroomControllerTest extends WebTestCase
         $crawler = $client->request('PUT', '/api/v1/classroom/update/999999', [], [], ['CONTENT_TYPE' => 'application/json'], '{
             "name" : "testtest",
             "capacity" : 2,
-            "start_date" : "12-06-2022",
-            "end_date" : "18-06-2022"
+            "start_date" : "12-06-2023",
+            "end_date" : "18-06-2023"
         }');
 
         $response = $client->getResponse();
