@@ -30,6 +30,7 @@ php bin/console doctrine:migrations:migrate
 phpunit tests/feature/ClassroomControllerTest.php
 phpunit tests/feature/MemberControllerTest.php
 phpunit tests/feature/BookingControllerTest.php
+phpunit tests/unit/AddClassroomTest.php
 ```
 
 
