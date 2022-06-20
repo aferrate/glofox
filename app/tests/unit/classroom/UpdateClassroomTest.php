@@ -19,7 +19,7 @@ class UpdateClassroomTest extends TestCase
         BypassFinals::enable();
     }
 
-    public function testAddClassroom(): void
+    public function testUpdateClassroom(): void
     {
         $params = ["name" => "test", "capacity" => 8, "start_date" => "10-06-2023", "end_date" => "17-06-2023"];
         $classroomRepository = $this->createMock(ClassroomRepository::class);
