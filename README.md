@@ -35,6 +35,11 @@ phpunit tests/unit/classroom/DeleteClassroomTest.php
 phpunit tests/unit/classroom/GetAllClassroomsTest.php
 phpunit tests/unit/classroom/GetClassroomFromIdTest.php
 phpunit tests/unit/classroom/UpdateClassroomTest.php
+phpunit tests/unit/member/AddMemberTest.php
+phpunit tests/unit/member/DeleteMemberTest.php
+phpunit tests/unit/member/GetAllMembersTest.php
+phpunit tests/unit/member/GetMemberFromIdTest.php
+phpunit tests/unit/member/UpdateMemberTest.php
 ```
 
 
