@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Unit;
+namespace App\Tests\Unit\Classroom;
 
 use PHPUnit\Framework\TestCase;
 use App\Repository\ClassroomRepository;
