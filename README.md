@@ -40,6 +40,11 @@ phpunit tests/unit/member/DeleteMemberTest.php
 phpunit tests/unit/member/GetAllMembersTest.php
 phpunit tests/unit/member/GetMemberFromIdTest.php
 phpunit tests/unit/member/UpdateMemberTest.php
+phpunit tests/unit/booking/AddBookingTest.php
+phpunit tests/unit/booking/DeleteBookingTest.php
+phpunit tests/unit/booking/GetAllBookingsTest.php
+phpunit tests/unit/booking/GetBookingFromIdTest.php
+phpunit tests/unit/booking/UpdateBookingTest.php
 ```
 
 
