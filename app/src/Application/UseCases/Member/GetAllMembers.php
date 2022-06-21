@@ -8,6 +8,7 @@ use App\Domain\Service\SerializerInterface;
 class GetAllMembers
 {
     private $memberRepository;
+    private $serializer;
 
     public function __construct(MemberRepositoryInterface $memberRepository, SerializerInterface $serializer)
     {

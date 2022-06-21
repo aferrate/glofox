@@ -31,25 +31,25 @@ final class CustomSerializer implements SerializerInterface
 
     public function deserialize(array $arrClass, string $class): object
     {
+        $objectDeserialized = null;
+
         switch ($class) {
             case 'classroom':
-                $classroom = $this->serializer->deserialize(
+                $objectDeserialized = $this->serializer->deserialize(
                     json_encode($arrClass), Classroom::class, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['start_date', 'end_date']]);
-                $classroom->setStartDate(DateTime::createFromFormat('d-m-Y', $arrClass['start_date']));
-                $classroom->setEndDate(DateTime::createFromFormat('d-m-Y', $arrClass['end_date']));
-
-                return $classroom;
+                $objectDeserialized->setStartDate(DateTime::createFromFormat('d-m-Y', $arrClass['start_date']));
+                $objectDeserialized->setEndDate(DateTime::createFromFormat('d-m-Y', $arrClass['end_date']));
                 break;
             case 'booking':
-                $booking = $this->serializer->deserialize(
+                $objectDeserialized = $this->serializer->deserialize(
                     json_encode($arrClass), Booking::class, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['date']]);
-                $booking->setDate(DateTime::createFromFormat('d-m-Y', $arrClass['date']));
-
-                return $booking;
+                $objectDeserialized->setDate(DateTime::createFromFormat('d-m-Y', $arrClass['date']));
                 break;
             case 'member':
-                return $this->serializer->deserialize(json_encode($arrClass), Member::class, 'json');
+                $objectDeserialized = $this->serializer->deserialize(json_encode($arrClass), Member::class, 'json');
                 break;
         }
+
+        return $objectDeserialized;
     }
 }

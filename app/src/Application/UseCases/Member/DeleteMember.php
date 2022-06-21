@@ -28,7 +28,7 @@ class DeleteMember
             $checkId = $this->memberChecker->checkId($id);
 
             if (false === $checkId['status']) {
-                return ['status' => false, 'data' => ['message' => $checkParams['message']]];
+                return ['status' => false, 'data' => ['message' => $checkId['message']]];
             }
 
             $member = $this->memberRepository->findOneById($id);
