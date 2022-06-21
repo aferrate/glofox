@@ -3,9 +3,8 @@
 namespace App\Application\UseCases\Booking;
 
 use App\Domain\Repository\BookingRepositoryInterface;
-use App\Domain\Model\Booking;
-use App\Domain\Validations\BookingChecker;
 use App\Domain\Service\SerializerInterface;
+use App\Domain\Validations\BookingChecker;
 
 class GetAllBookings
 {
@@ -17,8 +16,7 @@ class GetAllBookings
         BookingRepositoryInterface $bookingRepository,
         BookingChecker $bookingChecker,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->bookingRepository = $bookingRepository;
         $this->bookingChecker = $bookingChecker;
         $this->serializer = $serializer;
@@ -26,10 +24,10 @@ class GetAllBookings
 
     public function execute(): array
     {
-        try{
+        try {
             $bookingsObjs = $this->bookingRepository->findAll();
 
-            if(empty($bookingsObjs)) {
+            if (empty($bookingsObjs)) {
                 return ['status' => true, 'data' => ['message' => 'no bookings found']];
             }
 
@@ -40,7 +38,7 @@ class GetAllBookings
             }
 
             return ['status' => true, 'data' => $bookings];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

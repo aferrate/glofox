@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Domain\Model\Member;
 use App\Domain\Repository\MemberRepositoryInterface;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class MemberRepository implements MemberRepositoryInterface

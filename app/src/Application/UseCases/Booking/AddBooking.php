@@ -3,11 +3,10 @@
 namespace App\Application\UseCases\Booking;
 
 use App\Domain\Repository\BookingRepositoryInterface;
-use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Repository\ClassroomRepositoryInterface;
-use App\Domain\Model\Booking;
-use App\Domain\Validations\BookingChecker;
+use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Service\SerializerInterface;
+use App\Domain\Validations\BookingChecker;
 
 class AddBooking
 {
@@ -23,8 +22,7 @@ class AddBooking
         ClassroomRepositoryInterface $classroomRepository,
         BookingChecker $bookingChecker,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->bookingRepository = $bookingRepository;
         $this->memberRepository = $memberRepository;
         $this->classroomRepository = $classroomRepository;
@@ -34,43 +32,43 @@ class AddBooking
 
     public function execute(array $bookingArr): array
     {
-        try{
+        try {
             $checkParams = $this->bookingChecker->checkParams($bookingArr);
 
-            if($checkParams['status'] === false) {
+            if (false === $checkParams['status']) {
                 return ['status' => false, 'data' => ['message' => $checkParams['message']]];
             }
 
-            if(!is_null($this->bookingRepository->findByDateMemberIdClassId($bookingArr))) {
+            if (!is_null($this->bookingRepository->findByDateMemberIdClassId($bookingArr))) {
                 return ['status' => false, 'data' => ['message' => 'booking already exists']];
             }
 
-            if(is_null($this->memberRepository->findOneById($bookingArr['idMember']))) {
+            if (is_null($this->memberRepository->findOneById($bookingArr['idMember']))) {
                 return ['status' => false, 'data' => ['message' => 'unexistent member']];
             }
 
             $classroom = $this->classroomRepository->findOneById($bookingArr['idClassroom']);
 
-            if(is_null($classroom)) {
+            if (is_null($classroom)) {
                 return ['status' => false, 'data' => ['message' => 'unexistent classroom']];
             }
-            
-            if($classroom->getCapacity() <= $this->bookingRepository->countBookings($bookingArr)) {
+
+            if ($classroom->getCapacity() <= $this->bookingRepository->countBookings($bookingArr)) {
                 return ['status' => false, 'data' => ['message' => 'no slots available']];
             }
 
             $booking = $this->serializer->deserialize($bookingArr, 'booking');
-    
+
             $id = $this->bookingRepository->save($booking);
-    
+
             return [
                 'status' => true,
                 'data' => [
                     'message' => 'booking created!',
-                    'id' => $id
-                ]
+                    'id' => $id,
+                ],
             ];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

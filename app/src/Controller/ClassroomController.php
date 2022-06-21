@@ -2,19 +2,18 @@
 
 namespace App\Controller;
 
-use App\Application\UseCases\Classroom\GetClassroomFromId;
-use App\Application\UseCases\Classroom\GetAllClassrooms;
 use App\Application\UseCases\Classroom\AddClassroom;
-use App\Application\UseCases\Classroom\UpdateClassroom;
 use App\Application\UseCases\Classroom\DeleteClassroom;
+use App\Application\UseCases\Classroom\GetAllClassrooms;
+use App\Application\UseCases\Classroom\GetClassroomFromId;
+use App\Application\UseCases\Classroom\UpdateClassroom;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class ClassroomController
- * @package App\Controller
+ * Class ClassroomController.
  *
  * @Route(path="/api/v1/")
  */
@@ -65,7 +64,7 @@ class ClassroomController
         $result = $updateClassroom->execute($id, $data);
         $status = ($result['status']) ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST;
 
-		return new JsonResponse($result['data'], $status);
+        return new JsonResponse($result['data'], $status);
     }
 
     /**

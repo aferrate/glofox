@@ -4,9 +4,8 @@ namespace App\Repository;
 
 use App\Domain\Model\Classroom;
 use App\Domain\Repository\ClassroomRepositoryInterface;
-use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\EntityManagerInterface;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class ClassroomRepository implements ClassroomRepositoryInterface
 {

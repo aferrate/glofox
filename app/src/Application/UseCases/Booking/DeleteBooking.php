@@ -3,7 +3,6 @@
 namespace App\Application\UseCases\Booking;
 
 use App\Domain\Repository\BookingRepositoryInterface;
-use App\Domain\Model\Booking;
 use App\Domain\Validations\BookingChecker;
 
 class DeleteBooking
@@ -19,23 +18,23 @@ class DeleteBooking
 
     public function execute(int $id): array
     {
-        try{
+        try {
             $checkId = $this->bookingChecker->checkId($id);
 
-            if($checkId['status'] === false) {
+            if (false === $checkId['status']) {
                 return ['status' => false, 'data' => ['message' => $checkId['message']]];
             }
 
             $booking = $this->bookingRepository->findOneById($id);
 
-            if(is_null($booking)) {
+            if (is_null($booking)) {
                 return ['status' => false, 'data' => ['message' => 'no booking found']];
             }
-    
+
             $this->bookingRepository->delete($booking);
-    
+
             return ['status' => true, 'data' => ['message' => 'booking deleted']];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

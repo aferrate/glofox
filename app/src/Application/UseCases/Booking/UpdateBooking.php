@@ -2,12 +2,12 @@
 
 namespace App\Application\UseCases\Booking;
 
-use App\Domain\Repository\BookingRepositoryInterface;
-use App\Domain\Repository\MemberRepositoryInterface;
-use App\Domain\Repository\ClassroomRepositoryInterface;
 use App\Domain\Model\Booking;
-use App\Domain\Validations\BookingChecker;
+use App\Domain\Repository\BookingRepositoryInterface;
+use App\Domain\Repository\ClassroomRepositoryInterface;
+use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Service\SerializerInterface;
+use App\Domain\Validations\BookingChecker;
 
 class UpdateBooking
 {
@@ -23,8 +23,7 @@ class UpdateBooking
         MemberRepositoryInterface $memberRepository,
         ClassroomRepositoryInterface $classroomRepository,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->bookingRepository = $bookingRepository;
         $this->bookingChecker = $bookingChecker;
         $this->memberRepository = $memberRepository;
@@ -34,47 +33,47 @@ class UpdateBooking
 
     public function execute(int $id, array $bookingArr): array
     {
-        try{
+        try {
             $checkId = $this->bookingChecker->checkId($id);
 
-            if($checkId['status'] === false) {
+            if (false === $checkId['status']) {
                 return ['status' => false, 'data' => ['message' => $checkId['message']]];
             }
 
             $checkParams = $this->bookingChecker->checkParams($bookingArr);
 
-            if($checkParams['status'] === false) {
+            if (false === $checkParams['status']) {
                 return ['status' => false, 'data' => ['message' => $checkParams['message']]];
             }
 
             $booking = $this->bookingRepository->findOneById($id);
 
-            if(is_null($booking)) {
+            if (is_null($booking)) {
                 return ['status' => false, 'data' => ['message' => 'no booking found']];
             }
 
-            if(!is_null($this->bookingRepository->findByDateMemberIdClassId($bookingArr))) {
+            if (!is_null($this->bookingRepository->findByDateMemberIdClassId($bookingArr))) {
                 return ['status' => false, 'data' => ['message' => 'booking already exists']];
             }
 
-            if(is_null($this->memberRepository->findOneById($bookingArr['idMember']))) {
+            if (is_null($this->memberRepository->findOneById($bookingArr['idMember']))) {
                 return ['status' => false, 'data' => ['message' => 'unexistent member']];
             }
 
             $classroom = $this->classroomRepository->findOneById($bookingArr['idClassroom']);
 
-            if(is_null($classroom)) {
+            if (is_null($classroom)) {
                 return ['status' => false, 'data' => ['message' => 'unexistent classroom']];
             }
 
-            if($classroom->getCapacity() <= $this->bookingRepository->countBookings($bookingArr)) {
+            if ($classroom->getCapacity() <= $this->bookingRepository->countBookings($bookingArr)) {
                 return ['status' => false, 'data' => ['message' => 'no slots available']];
             }
-    
+
             $this->bookingRepository->save($this->updateBookingObject($booking, $bookingArr));
-    
+
             return ['status' => true, 'data' => ['message' => 'booking updated!']];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

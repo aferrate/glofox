@@ -3,9 +3,8 @@
 namespace App\Application\UseCases\Booking;
 
 use App\Domain\Repository\BookingRepositoryInterface;
-use App\Domain\Model\Booking;
-use App\Domain\Validations\BookingChecker;
 use App\Domain\Service\SerializerInterface;
+use App\Domain\Validations\BookingChecker;
 
 class GetBookingFromId
 {
@@ -17,8 +16,7 @@ class GetBookingFromId
         BookingRepositoryInterface $bookingRepository,
         BookingChecker $bookingChecker,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->bookingRepository = $bookingRepository;
         $this->bookingChecker = $bookingChecker;
         $this->serializer = $serializer;
@@ -26,23 +24,23 @@ class GetBookingFromId
 
     public function execute(int $id): array
     {
-        try{
+        try {
             $checkId = $this->bookingChecker->checkId($id);
 
-            if($checkId['status'] === false) {
+            if (false === $checkId['status']) {
                 return ['status' => false, 'data' => ['message' => $checkId['message']]];
             }
 
             $bookingObj = $this->bookingRepository->findOneById($id);
 
-            if(is_null($bookingObj)) {
+            if (is_null($bookingObj)) {
                 return ['status' => false, 'data' => ['message' => 'no booking found']];
             }
-    
+
             $booking = json_decode($this->serializer->serialize($bookingObj), true);
-    
+
             return ['status' => true, 'data' => $booking];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

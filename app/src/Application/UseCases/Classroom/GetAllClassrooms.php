@@ -3,7 +3,6 @@
 namespace App\Application\UseCases\Classroom;
 
 use App\Domain\Repository\ClassroomRepositoryInterface;
-use App\Domain\Model\Classroom;
 use App\Domain\Service\SerializerInterface;
 
 class GetAllClassrooms
@@ -19,10 +18,10 @@ class GetAllClassrooms
 
     public function execute(): array
     {
-        try{
+        try {
             $classroomsObjs = $this->classroomRepository->findAll();
 
-            if(empty($classroomsObjs)) {
+            if (empty($classroomsObjs)) {
                 return ['status' => true, 'data' => ['message' => 'no classrooms found']];
             }
 
@@ -33,7 +32,7 @@ class GetAllClassrooms
             }
 
             return ['status' => true, 'data' => $classrooms];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

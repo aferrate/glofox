@@ -4,9 +4,9 @@ namespace App\Repository;
 
 use App\Domain\Model\Booking;
 use App\Domain\Repository\BookingRepositoryInterface;
+use DateTime;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
-use DateTime;
 
 final class BookingRepository implements BookingRepositoryInterface
 {

@@ -3,7 +3,6 @@
 namespace App\Application\UseCases\Member;
 
 use App\Domain\Repository\MemberRepositoryInterface;
-use App\Domain\Model\Member;
 use App\Domain\Service\SerializerInterface;
 
 class GetAllMembers
@@ -18,10 +17,10 @@ class GetAllMembers
 
     public function execute(): array
     {
-        try{
+        try {
             $membersObjs = $this->memberRepository->findAll();
 
-            if(empty($membersObjs)) {
+            if (empty($membersObjs)) {
                 return ['status' => true, 'data' => ['message' => 'no members found']];
             }
 
@@ -32,7 +31,7 @@ class GetAllMembers
             }
 
             return ['status' => true, 'data' => $members];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

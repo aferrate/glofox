@@ -2,19 +2,18 @@
 
 namespace App\Controller;
 
-use App\Application\UseCases\Booking\GetBookingFromId;
-use App\Application\UseCases\Booking\GetAllBookings;
 use App\Application\UseCases\Booking\AddBooking;
-use App\Application\UseCases\Booking\UpdateBooking;
 use App\Application\UseCases\Booking\DeleteBooking;
+use App\Application\UseCases\Booking\GetAllBookings;
+use App\Application\UseCases\Booking\GetBookingFromId;
+use App\Application\UseCases\Booking\UpdateBooking;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class BookingController
- * @package App\Controller
+ * Class BookingController.
  *
  * @Route(path="/api/v1/")
  */
@@ -65,7 +64,7 @@ class BookingController
         $result = $updateBooking->execute($id, $data);
         $status = ($result['status']) ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST;
 
-		return new JsonResponse($result['data'], $status);
+        return new JsonResponse($result['data'], $status);
     }
 
     /**

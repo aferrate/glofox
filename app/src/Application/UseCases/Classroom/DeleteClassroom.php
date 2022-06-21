@@ -2,10 +2,9 @@
 
 namespace App\Application\UseCases\Classroom;
 
-use App\Domain\Repository\ClassroomRepositoryInterface;
 use App\Domain\Repository\BookingRepositoryInterface;
+use App\Domain\Repository\ClassroomRepositoryInterface;
 use App\Domain\Validations\ClassroomChecker;
-use App\Application\UseCases\Classroom\AbstractUseCaseClassroom;
 
 class DeleteClassroom extends AbstractUseCaseClassroom
 {
@@ -17,8 +16,7 @@ class DeleteClassroom extends AbstractUseCaseClassroom
         ClassroomRepositoryInterface $classroomRepository,
         BookingRepositoryInterface $bookingRepository,
         ClassroomChecker $classroomChecker
-    )
-    {
+    ) {
         $this->classroomRepository = $classroomRepository;
         $this->classroomChecker = $classroomChecker;
         $this->bookingRepository = $bookingRepository;
@@ -26,24 +24,24 @@ class DeleteClassroom extends AbstractUseCaseClassroom
 
     public function execute(int $id): array
     {
-        try{
+        try {
             $checkId = $this->classroomChecker->checkId($id);
 
-            if($checkId['status'] === false) {
+            if (false === $checkId['status']) {
                 return ['status' => false, 'data' => ['message' => $checkId['message']]];
             }
 
             $classroom = $this->classroomRepository->findOneById($id);
 
-            if(is_null($classroom)) {
+            if (is_null($classroom)) {
                 return ['status' => false, 'data' => ['message' => 'no classroom found']];
             }
-    
+
             $this->classroomRepository->delete($classroom);
             $this->deleteBookingsByClassroomId($id, $this->bookingRepository);
-    
+
             return ['status' => true, 'data' => ['message' => 'classroom deleted']];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

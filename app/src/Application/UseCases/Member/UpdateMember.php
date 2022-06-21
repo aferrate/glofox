@@ -2,10 +2,10 @@
 
 namespace App\Application\UseCases\Member;
 
-use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Model\Member;
-use App\Domain\Validations\MemberChecker;
+use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Service\SerializerInterface;
+use App\Domain\Validations\MemberChecker;
 
 class UpdateMember
 {
@@ -17,8 +17,7 @@ class UpdateMember
         MemberRepositoryInterface $memberRepository,
         MemberChecker $memberChecker,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->memberRepository = $memberRepository;
         $this->memberChecker = $memberChecker;
         $this->serializer = $serializer;
@@ -26,33 +25,33 @@ class UpdateMember
 
     public function execute(int $id, array $memberArr): array
     {
-        try{
+        try {
             $checkId = $this->memberChecker->checkId($id);
 
-            if($checkId['status'] === false) {
+            if (false === $checkId['status']) {
                 return ['status' => false, 'data' => ['message' => $checkId['message']]];
             }
 
             $checkParams = $this->memberChecker->checkName($memberArr);
 
-            if($checkParams['status'] === false) {
+            if (false === $checkParams['status']) {
                 return ['status' => false, 'data' => ['message' => $checkParams['message']]];
             }
 
             $member = $this->memberRepository->findOneById($id);
 
-            if(is_null($member)) {
+            if (is_null($member)) {
                 return ['status' => false, 'data' => ['message' => 'no member found']];
             }
 
-            if(!is_null($this->memberRepository->findOneByName($memberArr['name']))) {
+            if (!is_null($this->memberRepository->findOneByName($memberArr['name']))) {
                 return ['status' => false, 'data' => ['message' => 'member already exists']];
             }
-    
+
             $this->memberRepository->save($this->updateMemberObject($member, $memberArr));
-    
+
             return ['status' => true, 'data' => ['message' => 'member updated!']];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

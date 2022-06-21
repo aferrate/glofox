@@ -2,19 +2,18 @@
 
 namespace App\Controller;
 
-use App\Application\UseCases\Member\GetMemberFromId;
-use App\Application\UseCases\Member\GetAllMembers;
 use App\Application\UseCases\Member\AddMember;
-use App\Application\UseCases\Member\UpdateMember;
 use App\Application\UseCases\Member\DeleteMember;
+use App\Application\UseCases\Member\GetAllMembers;
+use App\Application\UseCases\Member\GetMemberFromId;
+use App\Application\UseCases\Member\UpdateMember;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class MemberController
- * @package App\Controller
+ * Class MemberController.
  *
  * @Route(path="/api/v1/")
  */
@@ -65,7 +64,7 @@ class MemberController
         $result = $updateMember->execute($id, $data);
         $status = ($result['status']) ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST;
 
-		return new JsonResponse($result['data'], $status);
+        return new JsonResponse($result['data'], $status);
     }
 
     /**

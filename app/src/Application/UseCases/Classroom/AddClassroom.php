@@ -3,10 +3,8 @@
 namespace App\Application\UseCases\Classroom;
 
 use App\Domain\Repository\ClassroomRepositoryInterface;
-use App\Domain\Model\Classroom;
-use App\Domain\Validations\ClassroomChecker;
 use App\Domain\Service\SerializerInterface;
-use App\Application\UseCases\Classroom\AbstractUseCaseClassroom;
+use App\Domain\Validations\ClassroomChecker;
 
 class AddClassroom extends AbstractUseCaseClassroom
 {
@@ -18,8 +16,7 @@ class AddClassroom extends AbstractUseCaseClassroom
         ClassroomRepositoryInterface $classroomRepository,
         ClassroomChecker $classroomChecker,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->classroomRepository = $classroomRepository;
         $this->classroomChecker = $classroomChecker;
         $this->serializer = $serializer;
@@ -27,29 +24,29 @@ class AddClassroom extends AbstractUseCaseClassroom
 
     public function execute(array $classroomArr): array
     {
-        try{
+        try {
             $checkParams = $this->classroomChecker->checkParams($classroomArr);
 
-            if($checkParams['status'] === false) {
+            if (false === $checkParams['status']) {
                 return ['status' => false, 'data' => ['message' => $checkParams['message']]];
             }
 
-            if(!is_null($this->classroomRepository->findOneByNameAndDatesAndCapacity($classroomArr))) {
+            if (!is_null($this->classroomRepository->findOneByNameAndDatesAndCapacity($classroomArr))) {
                 return ['status' => false, 'data' => ['message' => 'classroom already exists']];
             }
 
             $classroom = $this->serializer->deserialize($classroomArr, 'classroom');
-    
+
             $id = $this->classroomRepository->save($classroom);
-    
+
             return [
                 'status' => true,
                 'data' => [
                     'message' => 'classroom created!',
-                    'id' => $id
-                ]
+                    'id' => $id,
+                ],
             ];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

@@ -3,9 +3,8 @@
 namespace App\Application\UseCases\Member;
 
 use App\Domain\Repository\MemberRepositoryInterface;
-use App\Domain\Model\Member;
-use App\Domain\Validations\MemberChecker;
 use App\Domain\Service\SerializerInterface;
+use App\Domain\Validations\MemberChecker;
 
 class AddMember
 {
@@ -17,8 +16,7 @@ class AddMember
         MemberRepositoryInterface $memberRepository,
         MemberChecker $memberChecker,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->memberRepository = $memberRepository;
         $this->memberChecker = $memberChecker;
         $this->serializer = $serializer;
@@ -26,31 +24,31 @@ class AddMember
 
     public function execute(array $memberArr): array
     {
-        try{
+        try {
             $checkParams = $this->memberChecker->checkName($memberArr);
 
-            if($checkParams['status'] === false) {
+            if (false === $checkParams['status']) {
                 return ['status' => false, 'data' => ['message' => $checkParams['message']]];
             }
 
             $memberExist = $this->memberRepository->findOneByName($memberArr['name']);
 
-            if(!is_null($memberExist)) {
+            if (!is_null($memberExist)) {
                 return ['status' => false, 'data' => ['message' => 'member already exists']];
             }
-            
-            $member = $this->serializer->deserialize($memberArr, 'member');;
+
+            $member = $this->serializer->deserialize($memberArr, 'member');
 
             $id = $this->memberRepository->save($member);
-    
+
             return [
                 'status' => true,
                 'data' => [
                     'message' => 'member created!',
-                    'id' => $id
-                ]
+                    'id' => $id,
+                ],
             ];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }

@@ -2,15 +2,15 @@
 
 namespace App\Service;
 
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use App\Domain\Service\SerializerInterface;
-use App\Domain\Model\Classroom;
 use App\Domain\Model\Booking;
+use App\Domain\Model\Classroom;
 use App\Domain\Model\Member;
+use App\Domain\Service\SerializerInterface;
 use DateTime;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 final class CustomSerializer implements SerializerInterface
 {
@@ -32,7 +32,7 @@ final class CustomSerializer implements SerializerInterface
     public function deserialize(array $arrClass, string $class): object
     {
         switch ($class) {
-            case "classroom":
+            case 'classroom':
                 $classroom = $this->serializer->deserialize(
                     json_encode($arrClass), Classroom::class, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['start_date', 'end_date']]);
                 $classroom->setStartDate(DateTime::createFromFormat('d-m-Y', $arrClass['start_date']));
@@ -40,14 +40,14 @@ final class CustomSerializer implements SerializerInterface
 
                 return $classroom;
                 break;
-            case "booking":
+            case 'booking':
                 $booking = $this->serializer->deserialize(
                     json_encode($arrClass), Booking::class, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['date']]);
                 $booking->setDate(DateTime::createFromFormat('d-m-Y', $arrClass['date']));
-                
+
                 return $booking;
                 break;
-            case "member":
+            case 'member':
                 return $this->serializer->deserialize(json_encode($arrClass), Member::class, 'json');
                 break;
         }

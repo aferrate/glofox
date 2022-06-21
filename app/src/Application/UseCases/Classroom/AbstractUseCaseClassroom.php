@@ -11,11 +11,11 @@ abstract class AbstractUseCaseClassroom
         $bookingIds = $bookingRepository->findByClassroomId($id);
         $arrIds = [];
 
-        foreach($bookingIds as $id) {
+        foreach ($bookingIds as $id) {
             $arrIds[] = intval($id['id']);
         }
 
-        if(!empty($bookingIds)) {
+        if (!empty($bookingIds)) {
             $bookingRepository->deleteFromArrayOfIds($arrIds);
         }
     }

@@ -2,8 +2,8 @@
 
 namespace App\Application\UseCases\Member;
 
-use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Repository\BookingRepositoryInterface;
+use App\Domain\Repository\MemberRepositoryInterface;
 use App\Domain\Validations\MemberChecker;
 
 class DeleteMember
@@ -16,8 +16,7 @@ class DeleteMember
         MemberRepositoryInterface $memberRepository,
         BookingRepositoryInterface $bookingRepository,
         MemberChecker $memberChecker
-    )
-    {
+    ) {
         $this->memberRepository = $memberRepository;
         $this->memberChecker = $memberChecker;
         $this->bookingRepository = $bookingRepository;
@@ -25,24 +24,24 @@ class DeleteMember
 
     public function execute(int $id): array
     {
-        try{
+        try {
             $checkId = $this->memberChecker->checkId($id);
 
-            if($checkId['status'] === false) {
+            if (false === $checkId['status']) {
                 return ['status' => false, 'data' => ['message' => $checkParams['message']]];
             }
 
             $member = $this->memberRepository->findOneById($id);
 
-            if(is_null($member)) {
+            if (is_null($member)) {
                 return ['status' => false, 'data' => ['message' => 'no member found']];
             }
-            
+
             $this->memberRepository->delete($member);
             $this->deleteBookingsByMemberId($id);
-    
+
             return ['status' => true, 'data' => ['message' => 'member deleted']];
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return ['status' => false, 'data' => ['message' => $e->getMessage()]];
         }
     }
@@ -52,11 +51,11 @@ class DeleteMember
         $bookingIds = $this->bookingRepository->findByMemberId($id);
         $arrIds = [];
 
-        foreach($bookingIds as $id) {
+        foreach ($bookingIds as $id) {
             $arrIds[] = intval($id['id']);
         }
 
-        if(!empty($bookingIds)) {
+        if (!empty($bookingIds)) {
             $this->bookingRepository->deleteFromArrayOfIds($arrIds);
         }
     }
