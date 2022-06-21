@@ -2,13 +2,13 @@
 
 namespace App\Tests\Unit\Member;
 
-use PHPUnit\Framework\TestCase;
-use DG\BypassFinals;
+use App\Application\UseCases\Member\AddMember;
+use App\Domain\Model\Member;
+use App\Domain\Validations\MemberChecker;
 use App\Repository\MemberRepository;
 use App\Service\CustomSerializer;
-use App\Domain\Validations\MemberChecker;
-use App\Domain\Model\Member;
-use App\Application\UseCases\Member\AddMember;
+use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class AddMemberTest extends TestCase
 {
@@ -19,7 +19,7 @@ class AddMemberTest extends TestCase
 
     public function testAddMember(): void
     {
-        $params = ["name" => "test"];
+        $params = ['name' => 'test'];
         $memberRepository = $this->createMock(MemberRepository::class);
         $customSerializer = $this->createMock(CustomSerializer::class);
         $memberChecker = $this->createMock(MemberChecker::class);

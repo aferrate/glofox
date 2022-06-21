@@ -2,17 +2,17 @@
 
 namespace App\Tests\Unit\Booking;
 
-use PHPUnit\Framework\TestCase;
-use DG\BypassFinals;
-use App\Repository\ClassroomRepository;
-use App\Repository\MemberRepository;
-use App\Repository\BookingRepository;
-use App\Service\CustomSerializer;
-use App\Domain\Validations\BookingChecker;
 use App\Application\UseCases\Booking\AddBooking;
 use App\Domain\Model\Booking;
 use App\Domain\Model\Classroom;
 use App\Domain\Model\Member;
+use App\Domain\Validations\BookingChecker;
+use App\Repository\BookingRepository;
+use App\Repository\ClassroomRepository;
+use App\Repository\MemberRepository;
+use App\Service\CustomSerializer;
+use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class AddBookingTest extends TestCase
 {
@@ -23,7 +23,7 @@ class AddBookingTest extends TestCase
 
     public function testAddMember(): void
     {
-        $params = ["idMember" => 1, "idClassroom" => 1, "date" => "15-06-2023"];
+        $params = ['idMember' => 1, 'idClassroom' => 1, 'date' => '15-06-2023'];
         $classroomRepository = $this->createMock(ClassroomRepository::class);
         $bookingRepository = $this->createMock(BookingRepository::class);
         $memberRepository = $this->createMock(MemberRepository::class);

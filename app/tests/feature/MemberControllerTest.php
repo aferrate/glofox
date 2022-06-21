@@ -2,8 +2,8 @@
 
 namespace App\Tests\Feature;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Repository\MemberRepository;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class MemberControllerTest extends WebTestCase
 {
@@ -15,7 +15,7 @@ class MemberControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame("no members found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no members found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testGetNonExistentMemberById(): void
@@ -26,7 +26,7 @@ class MemberControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(400, $response->getStatusCode());
-        $this->assertSame("no member found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no member found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testUpdateNonExistentMember(): void
@@ -39,7 +39,7 @@ class MemberControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(400, $client->getResponse()->getStatusCode());
-        $this->assertSame("no member found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no member found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testDeleteNonExistentMember(): void
@@ -50,7 +50,7 @@ class MemberControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(400, $client->getResponse()->getStatusCode());
-        $this->assertSame("no member found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no member found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testAddMember(): void
@@ -63,7 +63,7 @@ class MemberControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(201, $client->getResponse()->getStatusCode());
-        $this->assertSame("member created!", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('member created!', json_decode($response->getContent(), true)['message']);
     }
 
     public function testUpdateMember(): void
@@ -80,7 +80,7 @@ class MemberControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame("member updated!", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('member updated!', json_decode($response->getContent(), true)['message']);
     }
 
     public function testDeleteMember(): void
@@ -89,12 +89,12 @@ class MemberControllerTest extends WebTestCase
         $memberRepository = static::getContainer()->get(MemberRepository::class);
 
         $idMember = $memberRepository->findOneByName('testmemberupdate')->getId();
-        
+
         $crawler = $client->request('DELETE', "/api/v1/member/delete/$idMember");
 
         $response = $client->getResponse();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame("member deleted", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('member deleted', json_decode($response->getContent(), true)['message']);
     }
 }

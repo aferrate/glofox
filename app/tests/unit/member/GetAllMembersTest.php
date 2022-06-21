@@ -2,12 +2,12 @@
 
 namespace App\Tests\Unit\Member;
 
-use PHPUnit\Framework\TestCase;
-use DG\BypassFinals;
+use App\Application\UseCases\Member\GetAllMembers;
 use App\Domain\Model\Member;
 use App\Repository\MemberRepository;
 use App\Service\CustomSerializer;
-use App\Application\UseCases\Member\GetAllMembers;
+use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class GetAllMembersTest extends TestCase
 {

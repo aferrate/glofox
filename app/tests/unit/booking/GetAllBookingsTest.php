@@ -2,13 +2,13 @@
 
 namespace App\Tests\Unit\Booking;
 
-use PHPUnit\Framework\TestCase;
-use DG\BypassFinals;
-use App\Repository\BookingRepository;
-use App\Domain\Validations\BookingChecker;
-use App\Service\CustomSerializer;
 use App\Application\UseCases\Booking\GetAllBookings;
 use App\Domain\Model\Booking;
+use App\Domain\Validations\BookingChecker;
+use App\Repository\BookingRepository;
+use App\Service\CustomSerializer;
+use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class GetAllBookingsTest extends TestCase
 {

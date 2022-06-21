@@ -2,8 +2,8 @@
 
 namespace App\Tests\Feature;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Repository\ClassroomRepository;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ClassroomControllerTest extends WebTestCase
 {
@@ -15,7 +15,7 @@ class ClassroomControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame("no classrooms found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no classrooms found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testGetNonExistentClassroomById(): void
@@ -26,7 +26,7 @@ class ClassroomControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(400, $response->getStatusCode());
-        $this->assertSame("no classroom found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no classroom found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testUpdateNonExistentClassroom(): void
@@ -42,7 +42,7 @@ class ClassroomControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(400, $client->getResponse()->getStatusCode());
-        $this->assertSame("no classroom found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no classroom found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testDeleteNonExistentClassroom(): void
@@ -53,7 +53,7 @@ class ClassroomControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(400, $client->getResponse()->getStatusCode());
-        $this->assertSame("no classroom found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no classroom found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testAddClassroom(): void
@@ -69,7 +69,7 @@ class ClassroomControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(201, $client->getResponse()->getStatusCode());
-        $this->assertSame("classroom created!", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('classroom created!', json_decode($response->getContent(), true)['message']);
     }
 
     public function testUpdateClassroom(): void
@@ -81,7 +81,7 @@ class ClassroomControllerTest extends WebTestCase
             'name' => 'testclassroom',
             'capacity' => 7,
             'start_date' => '10-06-2023',
-            'end_date' => '15-06-2023'
+            'end_date' => '15-06-2023',
         ])->getId();
 
         $crawler = $client->request('PUT', "/api/v1/classroom/update/$idClass", [], [], ['CONTENT_TYPE' => 'application/json'], '{
@@ -94,7 +94,7 @@ class ClassroomControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame("classroom updated!", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('classroom updated!', json_decode($response->getContent(), true)['message']);
     }
 
     public function testDeleteClassroom(): void
@@ -106,14 +106,14 @@ class ClassroomControllerTest extends WebTestCase
             'name' => 'testclassroomupdate',
             'capacity' => 9,
             'start_date' => '09-06-2023',
-            'end_date' => '16-06-2023'
+            'end_date' => '16-06-2023',
         ])->getId();
-        
+
         $crawler = $client->request('DELETE', "/api/v1/classroom/delete/$idClass");
 
         $response = $client->getResponse();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame("classroom deleted", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('classroom deleted', json_decode($response->getContent(), true)['message']);
     }
 }

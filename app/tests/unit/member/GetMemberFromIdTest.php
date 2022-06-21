@@ -2,13 +2,13 @@
 
 namespace App\Tests\Unit\Member;
 
-use PHPUnit\Framework\TestCase;
-use DG\BypassFinals;
-use App\Repository\MemberRepository;
-use App\Service\CustomSerializer;
-use App\Domain\Validations\MemberChecker;
 use App\Application\UseCases\Member\GetMemberFromId;
 use App\Domain\Model\Member;
+use App\Domain\Validations\MemberChecker;
+use App\Repository\MemberRepository;
+use App\Service\CustomSerializer;
+use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class GetMemberFromIdTest extends TestCase
 {

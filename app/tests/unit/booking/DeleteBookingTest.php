@@ -2,12 +2,12 @@
 
 namespace App\Tests\Unit\Booking;
 
-use PHPUnit\Framework\TestCase;
-use DG\BypassFinals;
-use App\Repository\BookingRepository;
-use App\Domain\Validations\BookingChecker;
-use App\Domain\Model\Booking;
 use App\Application\UseCases\Booking\DeleteBooking;
+use App\Domain\Model\Booking;
+use App\Domain\Validations\BookingChecker;
+use App\Repository\BookingRepository;
+use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class DeleteBookingTest extends TestCase
 {

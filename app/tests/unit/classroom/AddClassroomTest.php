@@ -2,13 +2,13 @@
 
 namespace App\Tests\Unit\Classroom;
 
-use PHPUnit\Framework\TestCase;
-use App\Repository\ClassroomRepository;
-use App\Service\CustomSerializer;
-use App\Domain\Validations\ClassroomChecker;
 use App\Application\UseCases\Classroom\AddClassroom;
 use App\Domain\Model\Classroom;
+use App\Domain\Validations\ClassroomChecker;
+use App\Repository\ClassroomRepository;
+use App\Service\CustomSerializer;
 use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class AddClassroomTest extends TestCase
 {
@@ -19,7 +19,7 @@ class AddClassroomTest extends TestCase
 
     public function testAddClassroom(): void
     {
-        $params = ["name" => "test", "capacity" => 8, "start_date" => "10-06-2023", "end_date" => "17-06-2023"];
+        $params = ['name' => 'test', 'capacity' => 8, 'start_date' => '10-06-2023', 'end_date' => '17-06-2023'];
         $classroomRepository = $this->createMock(ClassroomRepository::class);
         $customSerializer = $this->createMock(CustomSerializer::class);
         $classroomChecker = $this->createMock(ClassroomChecker::class);

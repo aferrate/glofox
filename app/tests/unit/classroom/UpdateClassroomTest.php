@@ -2,15 +2,15 @@
 
 namespace App\Tests\Unit\Classroom;
 
-use PHPUnit\Framework\TestCase;
-use App\Repository\ClassroomRepository;
-use App\Repository\BookingRepository;
-use App\Service\CustomSerializer;
-use App\Domain\Validations\ClassroomChecker;
 use App\Application\UseCases\Classroom\UpdateClassroom;
 use App\Domain\Model\Classroom;
-use DG\BypassFinals;
+use App\Domain\Validations\ClassroomChecker;
+use App\Repository\BookingRepository;
+use App\Repository\ClassroomRepository;
+use App\Service\CustomSerializer;
 use DateTime;
+use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class UpdateClassroomTest extends TestCase
 {
@@ -21,7 +21,7 @@ class UpdateClassroomTest extends TestCase
 
     public function testUpdateClassroom(): void
     {
-        $params = ["name" => "test", "capacity" => 8, "start_date" => "10-06-2023", "end_date" => "17-06-2023"];
+        $params = ['name' => 'test', 'capacity' => 8, 'start_date' => '10-06-2023', 'end_date' => '17-06-2023'];
         $classroomRepository = $this->createMock(ClassroomRepository::class);
         $bookingRepository = $this->createMock(BookingRepository::class);
         $customSerializer = $this->createMock(CustomSerializer::class);

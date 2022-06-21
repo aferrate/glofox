@@ -2,13 +2,13 @@
 
 namespace App\Tests\Unit\Classroom;
 
-use PHPUnit\Framework\TestCase;
-use App\Repository\ClassroomRepository;
-use App\Repository\BookingRepository;
-use App\Domain\Validations\ClassroomChecker;
 use App\Application\UseCases\Classroom\DeleteClassroom;
 use App\Domain\Model\Classroom;
+use App\Domain\Validations\ClassroomChecker;
+use App\Repository\BookingRepository;
+use App\Repository\ClassroomRepository;
 use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class DeleteClassroomTest extends TestCase
 {

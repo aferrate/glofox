@@ -2,13 +2,13 @@
 
 namespace App\Tests\Unit\Classroom;
 
-use PHPUnit\Framework\TestCase;
-use App\Repository\ClassroomRepository;
-use App\Service\CustomSerializer;
-use App\Domain\Validations\ClassroomChecker;
 use App\Application\UseCases\Classroom\GetClassroomFromId;
 use App\Domain\Model\Classroom;
+use App\Domain\Validations\ClassroomChecker;
+use App\Repository\ClassroomRepository;
+use App\Service\CustomSerializer;
 use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class GetClassroomFromIdTest extends TestCase
 {

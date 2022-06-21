@@ -2,12 +2,12 @@
 
 namespace App\Tests\Unit\Classroom;
 
-use PHPUnit\Framework\TestCase;
-use App\Repository\ClassroomRepository;
-use App\Service\CustomSerializer;
 use App\Application\UseCases\Classroom\GetAllClassrooms;
 use App\Domain\Model\Classroom;
+use App\Repository\ClassroomRepository;
+use App\Service\CustomSerializer;
 use DG\BypassFinals;
+use PHPUnit\Framework\TestCase;
 
 class GetAllClassroomsTest extends TestCase
 {

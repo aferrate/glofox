@@ -2,13 +2,13 @@
 
 namespace App\Tests\Feature;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use App\Repository\MemberRepository;
-use App\Repository\ClassroomRepository;
-use App\Repository\BookingRepository;
 use App\Domain\Model\Classroom;
 use App\Domain\Model\Member;
+use App\Repository\BookingRepository;
+use App\Repository\ClassroomRepository;
+use App\Repository\MemberRepository;
 use DateTime;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BookingControllerTest extends WebTestCase
 {
@@ -20,7 +20,7 @@ class BookingControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame("no bookings found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no bookings found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testGetNonExistentBookingById(): void
@@ -31,7 +31,7 @@ class BookingControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(400, $response->getStatusCode());
-        $this->assertSame("no booking found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no booking found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testUpdateNonExistentBooking(): void
@@ -46,7 +46,7 @@ class BookingControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(400, $client->getResponse()->getStatusCode());
-        $this->assertSame("no booking found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no booking found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testDeleteNonExistentBooking(): void
@@ -57,7 +57,7 @@ class BookingControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(400, $client->getResponse()->getStatusCode());
-        $this->assertSame("no booking found", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('no booking found', json_decode($response->getContent(), true)['message']);
     }
 
     public function testAddBooking(): void
@@ -75,7 +75,7 @@ class BookingControllerTest extends WebTestCase
         $classroom->setEndDate(DateTime::createFromFormat('d-m-Y', '15-06-2023'));
         $idMember = $memberRepository->save($member);
         $idClassroom = $classroomRepository->save($classroom);
-        
+
         $crawler = $client->request('POST', '/api/v1/booking/create', [], [], ['CONTENT_TYPE' => 'application/json'], '{
             "idMember" : '.$idMember.',
             "idClassroom" : '.$idClassroom.',
@@ -85,7 +85,7 @@ class BookingControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(201, $client->getResponse()->getStatusCode());
-        $this->assertSame("booking created!", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('booking created!', json_decode($response->getContent(), true)['message']);
     }
 
     public function testUpdateBooking(): void
@@ -100,11 +100,11 @@ class BookingControllerTest extends WebTestCase
             'name' => 'testclassroom',
             'capacity' => 7,
             'start_date' => '10-06-2023',
-            'end_date' => '15-06-2023'
+            'end_date' => '15-06-2023',
         ])->getId();
         $idBooking = $bookingRepository->findByDateMemberIdClassId([
             'idMember' => $idMember, 'idClassroom' => $idClassroom,
-            'date' => '14-06-2023'
+            'date' => '14-06-2023',
         ])->getId();
 
         $crawler = $client->request('PUT', "/api/v1/booking/update/$idBooking", [], [], ['CONTENT_TYPE' => 'application/json'], '{
@@ -116,7 +116,7 @@ class BookingControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame("booking updated!", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('booking updated!', json_decode($response->getContent(), true)['message']);
     }
 
     public function testDeleteBooking(): void
@@ -132,18 +132,18 @@ class BookingControllerTest extends WebTestCase
             'name' => 'testclassroom',
             'capacity' => 7,
             'start_date' => '10-06-2023',
-            'end_date' => '15-06-2023'
+            'end_date' => '15-06-2023',
         ])->getId();
         $idBooking = $bookingRepository->findByDateMemberIdClassId([
             'idMember' => $idMember, 'idClassroom' => $idClassroom,
-            'date' => '13-06-2023'
+            'date' => '13-06-2023',
         ])->getId();
-        
+
         $crawler = $client->request('DELETE', "/api/v1/booking/delete/$idBooking");
 
         $response = $client->getResponse();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame("booking deleted", json_decode($response->getContent(), true)['message']);
+        $this->assertSame('booking deleted', json_decode($response->getContent(), true)['message']);
     }
 }
