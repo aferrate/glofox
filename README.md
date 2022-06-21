@@ -25,26 +25,26 @@ docker-compose exec workspace bash
 php bin/console doctrine:migrations:migrate
 ```
 
+
 ### Run tests (run with empty db tables):
 ```
 phpunit tests/feature/ClassroomControllerTest.php
 phpunit tests/feature/MemberControllerTest.php
 phpunit tests/feature/BookingControllerTest.php
-phpunit tests/unit/classroom/AddClassroomTest.php
-phpunit tests/unit/classroom/DeleteClassroomTest.php
-phpunit tests/unit/classroom/GetAllClassroomsTest.php
-phpunit tests/unit/classroom/GetClassroomFromIdTest.php
-phpunit tests/unit/classroom/UpdateClassroomTest.php
-phpunit tests/unit/member/AddMemberTest.php
-phpunit tests/unit/member/DeleteMemberTest.php
-phpunit tests/unit/member/GetAllMembersTest.php
-phpunit tests/unit/member/GetMemberFromIdTest.php
-phpunit tests/unit/member/UpdateMemberTest.php
-phpunit tests/unit/booking/AddBookingTest.php
-phpunit tests/unit/booking/DeleteBookingTest.php
-phpunit tests/unit/booking/GetAllBookingsTest.php
-phpunit tests/unit/booking/GetBookingFromIdTest.php
-phpunit tests/unit/booking/UpdateBookingTest.php
+
+phpunit tests/unit
+```
+
+
+### Run php-cs-fixer in folder src:
+```
+php-cs-fixer fix ./src --rules=@Symfony
+```
+
+
+### Run phpstan in folder src (levels can vary from 1 to 7):
+```
+./vendor/bin/phpstan analyse --level 1 src
 ```
 
 
