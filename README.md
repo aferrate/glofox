@@ -43,7 +43,7 @@ php-cs-fixer fix ./src --rules=@Symfony
 ```
 
 
-### Run phpstan in folder src (levels can vary from 1 to 7):
+### Run phpstan in folder src (levels can vary from 0 to 9):
 ```
 docker-compose exec workspace bash
 ./vendor/bin/phpstan analyse --level 1 src
