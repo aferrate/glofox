@@ -38,12 +38,14 @@ phpunit tests/unit
 
 ### Run php-cs-fixer in folder src:
 ```
+docker-compose exec workspace bash
 php-cs-fixer fix ./src --rules=@Symfony
 ```
 
 
 ### Run phpstan in folder src (levels can vary from 1 to 7):
 ```
+docker-compose exec workspace bash
 ./vendor/bin/phpstan analyse --level 1 src
 ```
 
